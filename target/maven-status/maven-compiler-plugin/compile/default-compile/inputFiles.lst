@@ -7,13 +7,14 @@ D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\c
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\dto\OrderRequest.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\dto\RegisterRequest.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\controller\MenuController.java
+D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\entity\OrderStatus.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\controller\AuthController.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\controller\PaymentController.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\entity\MenuItem.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\service\NotificationService.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\OrderRepo.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\dto\LoginRequest.java
-D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\OrderItemRepository.java
+D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\OrderItemRepo.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\security\UserDetailsServiceImpl.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\PaymentRepository.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\service\PaymentService.java
@@ -30,3 +31,4 @@ D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\s
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\UserRepository.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\repository\MenuItemRepository.java
 D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\service\OrderService.java
+D:\OneDrive\Desktop\restaurant-management-system\src\main\java\com\example\rms\entity\PaymentStatus.java

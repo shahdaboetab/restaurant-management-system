@@ -1,16 +1,8 @@
 package com.example.rms.entity;
 
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "customers_orders")
@@ -20,75 +12,63 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer customerId;   
-    
-    private String status;
-    private Date createdAt;
-    private Date updatedAt;
+    private Integer customerId;
+    private Integer staffId;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "orderId")
+    private double totalPrice;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
+    private String paymentMethod;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
-    public Order() {
+    public Order() {}
+
+    @PrePersist
+    public void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public Order(Integer orderId, Integer customerId, String status, Date createdAt, Date updatedAt, List<OrderItem> items) {
-        this.orderId = orderId;
-        this.customerId = customerId;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.items = items;
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
-    public Integer getOrderId() {
-        return this.orderId;
-    }
+    // getters & setters
+    public Integer getOrderId() { return orderId; }
+    public void setOrderId(Integer orderId) { this.orderId = orderId; }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
+    public Integer getCustomerId() { return customerId; }
+    public void setCustomerId(Integer customerId) { this.customerId = customerId; }
 
-    public Integer getCustomerId() {
-        return this.customerId;
-    }
+    public Integer getStaffId() { return staffId; }
+    public void setStaffId(Integer staffId) { this.staffId = staffId; }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
-    }
+    public double getTotalPrice() { return totalPrice; }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
 
-    public String getStatus() {
-        return this.status;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public OrderStatus getStatus() { return status; }
+    public void setStatus(OrderStatus status) { this.status = status; }
 
-    public Date getCreatedAt() {
-        return this.createdAt;
-    }
+    public PaymentStatus getPaymentStatus() { return paymentStatus; }
+    public void setPaymentStatus(PaymentStatus paymentStatus) { this.paymentStatus = paymentStatus; }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+    public String getPaymentMethod() { return paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 
-    public Date getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public List<OrderItem> getItems() {
-        return this.items;
-    }
-
-    public void setItems(List<OrderItem> items) {
-        this.items = items;
-    }
-
+    public List<OrderItem> getItems() { return items; }
+    public void setItems(List<OrderItem> items) { this.items = items; }
 }

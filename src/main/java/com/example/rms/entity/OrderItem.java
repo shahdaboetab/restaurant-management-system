@@ -1,10 +1,8 @@
 package com.example.rms.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "order_items")
@@ -14,18 +12,19 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer itemId;
 
-    private Integer orderId;  //refers to orderid in Order class
-    private Integer productId;
     private String productname;
     private Integer quantity;
     private Double price;
 
-
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonIgnore
+    private Order order;
 
     public OrderItem() {
     }
 
-    
+
     public Integer getItemId() {
         return this.itemId;
     }
@@ -34,20 +33,12 @@ public class OrderItem {
         this.itemId = itemId;
     }
 
-    public Integer getOrderId() {
-        return this.orderId;
+    public String getProductname() {
+        return this.productname;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
-
-    public Integer getProductId() {
-        return this.productId;
-    }
-
-    public void setProductId(Integer productId) {
-        this.productId = productId;
+    public void setProductname(String productname) {
+        this.productname = productname;
     }
 
     public Integer getQuantity() {
@@ -66,14 +57,15 @@ public class OrderItem {
         this.price = price;
     }
 
-    public String getProductName(){
-        return this.productname;
+    public Order getOrder() {
+        return this.order;
     }
 
-    public void setProuductName(String productname){
-        this.productname = productname;
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
+    
 }
 
    
