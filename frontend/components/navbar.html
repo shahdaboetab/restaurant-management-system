@@ -1,0 +1,40 @@
+<nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    
+    <!-- Logo -->
+    <a href="/" class="text-2xl font-bold text-red-600 tracking-wide">
+      🍽️ Smart Restaurant
+    </a>
+
+    <!-- Menu -->
+    <ul class="hidden md:flex space-x-6 text-gray-700 font-medium">
+
+      <li><a href="/customer/menu.html" class="hover:text-red-500 transition">Menu</a></li>
+      <li><a href="/customer/track-order.html" class="hover:text-red-500 transition">Track Order</a></li>
+      <li><a href="/customer/order-history.html" class="hover:text-red-500 transition">Orders</a></li>
+
+      <li><a href="/auth/login.html" class="hover:text-red-500 transition">Login</a></li>
+    </ul>
+
+    <!-- Mobile menu button -->
+    <button id="mobile-btn" class="md:hidden text-gray-700 text-2xl">
+      ☰
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 space-y-3">
+    <a href="/customer/menu.html" class="block text-gray-700 hover:text-red-500">Menu</a>
+    <a href="/customer/track-order.html" class="block text-gray-700 hover:text-red-500">Track Order</a>
+    <a href="/customer/order-history.html" class="block text-gray-700 hover:text-red-500">Orders</a>
+    <a href="/auth/login.html" class="block text-gray-700 hover:text-red-500">Login</a>
+  </div>
+</nav>
+
+<script>
+  const btn = document.getElementById("mobile-btn");
+  const menu = document.getElementById("mobile-menu");
+  btn.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+</script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Orders Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    
+    <link rel="stylesheet" href="../assets/css/staff.css" /> 
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    
+    <div id="navbar"></div>
+
+    <main class="container mx-auto px-4 py-8">
+        
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
+            <i class="fas fa-concierge-bell text-red-600 mr-3"></i> 
+            إدارة طلبات المطعم (Staff Dashboard)
+        </h2>
+
+        <div class="flex space-x-4 mb-6 border-b border-red-200">
+            <button 
+                data-status="PENDING" 
+                class="tab-button bg-red-600 text-white px-4 py-2 rounded-t-lg font-semibold transition hover:bg-red-700"
+            >
+                طلبات جديدة (Pending)
+                <span id="pending-count" class="ml-2 bg-white text-red-600 px-2 rounded-full text-sm">0</span>
+            </button>
+            <button 
+                data-status="PREPARING" 
+                class="tab-button text-gray-600 px-4 py-2 font-semibold transition hover:text-red-600"
+            >
+                قيد التجهيز (Preparing)
+            </button>
+            <button 
+                data-status="READY" 
+                class="tab-button text-gray-600 px-4 py-2 font-semibold transition hover:text-red-600"
+            >
+                جاهز للاستلام (Ready)
+            </button>
+        </div>
+
+        <div id="orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <p id="loading-message" class="col-span-full text-center text-lg text-gray-500">جاري تحميل الطلبات...</p>
+        </div>
+
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/staff.js"></script> 
+    
+    <script>
+        // دالة تحميل المكونات
+        async function includeComponent(id, file) {
+            try {
+                const html = await fetch(file).then(res => {
+                    if (!res.ok) throw new Error(`Failed to load ${file}`);
+                    return res.text();
+                });
+                document.getElementById(id).innerHTML = html;
+            } catch (error) {
+                console.error("Error loading component:", error);
+            }
+        }
+        
+        // تحميل الـ Navbar والـ Footer
+        document.addEventListener('DOMContentLoaded', () => {
+             // تأكد من تحميل النافبار المناسب للموظفين
+             includeComponent("navbar", "../components/navbar.html");
+             includeComponent("footer", "../components/footer.html");
+        });
+    </script>
+</body>
+</html>
