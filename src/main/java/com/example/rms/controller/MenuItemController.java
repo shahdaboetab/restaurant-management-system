@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.rms.dto.MenuItemDto;
 import com.example.rms.service.MenuItemService;
@@ -29,8 +31,13 @@ public class MenuItemController {
     }
 
     @PostMapping("/{categoryId}")
-    public MenuItemDto create(@PathVariable int categoryId, @RequestBody MenuItemDto item){
-        return menuItemService.createMenuItem(categoryId, item);
+    public MenuItemDto create(@PathVariable int categoryId, @RequestParam("name") String name, @RequestParam("description") String description, @RequestParam("price") Double price, @RequestParam("image") MultipartFile imageFile){
+        MenuItemDto dto = new MenuItemDto();
+        dto.setName(name);
+        dto.setDescription(description);
+        dto.setPrice(price);
+        
+        return menuItemService.createMenuItem(categoryId, dto, imageFile);
     }
 
     @GetMapping("/category/{categoryId}")
@@ -48,4 +55,3 @@ public class MenuItemController {
         menuItemService.deleteMenuItem(id);
     }
 }
-

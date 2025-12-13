@@ -22,6 +22,8 @@ public class MenuItem {
     private String description;
     @Column(name = "menuItem_price")
     private Double price;
+    @Column(name = "menuItem_imageUrl")
+    private String imageUrl;
 
     @ManyToOne
     private Category category;
@@ -77,5 +79,14 @@ public class MenuItem {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 
 }

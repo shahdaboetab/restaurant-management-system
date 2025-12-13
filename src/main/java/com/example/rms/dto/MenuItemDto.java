@@ -8,7 +8,7 @@ public class MenuItemDto {
     private String description;
     private Double price;
     private int categoryId; 
-
+    private String imageUrl;
 
     public MenuItemDto() {
     }
@@ -61,6 +61,14 @@ public class MenuItemDto {
         this.categoryId = categoryId;
     }    
 
+    public String getImageUrl() {
+        return this.imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
 
     public static MenuItemDto fromEntityToDto(MenuItem entity) {
         MenuItemDto dto = new MenuItemDto();
@@ -69,6 +77,7 @@ public class MenuItemDto {
         dto.setDescription(entity.getDescription());
         dto.setPrice(entity.getPrice());
         dto.setCategoryId(entity.getCategory().getId());
+        dto.setImageUrl(entity.getImageUrl());
         return dto;
     }
 
@@ -78,6 +87,7 @@ public class MenuItemDto {
         entity.setName(this.name);
         entity.setDescription(this.description);
         entity.setPrice(this.price);
+        entity.setImageUrl(this.imageUrl);
         return entity;
     }
 
