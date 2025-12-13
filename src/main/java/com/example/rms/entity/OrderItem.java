@@ -1,6 +1,12 @@
 package com.example.rms.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -15,6 +21,7 @@ public class OrderItem {
     private String productname;
     private Integer quantity;
     private Double price;
+    private Integer menuItemId;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
@@ -63,6 +70,14 @@ public class OrderItem {
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Integer getMenuItemId() {
+        return this.menuItemId;
+    }
+    
+    public void setMenuItemId(Integer menuItemId) {
+        this.menuItemId = menuItemId;
     }
 
     

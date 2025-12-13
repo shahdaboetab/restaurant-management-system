@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.example.rms.entity.OrderItem;
 
-
-
 public class OrderRequest {
 
     private Integer customerId; 
