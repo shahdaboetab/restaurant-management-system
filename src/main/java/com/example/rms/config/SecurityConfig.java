@@ -12,6 +12,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
+            .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin())) // يسمح بالiframe لنفس الدومين
             .authorizeHttpRequests(auth -> auth
                 .anyRequest().permitAll() // Allow all requests
             );
