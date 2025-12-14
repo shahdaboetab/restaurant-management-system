@@ -1,6 +1,14 @@
-/target/
+# Maven
+target/
+
+# Java
 *.class
-*.jar
-*.log
-.idea/
+
+# IDE
 .vscode/
+*.code-workspace
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
