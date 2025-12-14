@@ -1,0 +1,5 @@
+- [x] Update pom.xml: Replace MySQL connector with MSSQL JDBC driver
+- [x] Update application.properties: Change datasource configuration for MSSQL
+- [x] Update docker-compose.yml: Replace MySQL service with MSSQL service
+- [x] Convert schema.sql from MySQL syntax to MSSQL syntax
+- [ ] Test the MSSQL connection by running the application

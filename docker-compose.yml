@@ -1,0 +1,25 @@
+services:
+  mssql-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: YourStrong!Passw0rd
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql
+
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mssql-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlserver://mssql-db:1433;databaseName=rms_db;encrypt=false;trustServerCertificate=true
+      SPRING_DATASOURCE_USERNAME: sa
+      SPRING_DATASOURCE_PASSWORD: YourStrong!Passw0rd
+
+volumes:
+  db-data:

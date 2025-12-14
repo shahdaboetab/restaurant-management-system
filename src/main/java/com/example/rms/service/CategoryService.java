@@ -1,6 +1,7 @@
 package com.example.rms.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class CategoryService {
         return categoryRepository.findAll()
         .stream()
         .map(CategoryDto::fromEntityToDto)
-        .toList();
+        .collect(Collectors.toList());
     }
 
     public CategoryDto updateCategory(int id, CategoryDto newCategory){
