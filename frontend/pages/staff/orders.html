@@ -12,7 +12,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     />
     
-    <link rel="stylesheet" href="../assets/css/staff.css" /> 
+    <link rel="stylesheet" href="../../assets/css/staff.css" /> 
 </head>
 
 <body class="bg-gray-100 min-h-screen pt-16">
@@ -110,17 +110,17 @@
           </a>
         </li>
         <li>
-          <a href="../../frontend/pages/customer/menu.html" class="hover:text-red-400 transition">
+          <a href="../customer/menu.html" class="hover:text-red-400 transition">
             Menu
           </a>
         </li>
         <li>
-          <a href="../../frontend/auth/login.html" class="hover:text-red-400 transition">
+          <a href="../../auth/login.html" class="hover:text-red-400 transition">
             Login
           </a>
         </li>
         <li>
-          <a href="../../frontend/auth/register.html" class="hover:text-red-400 transition">
+          <a href="../../auth/register.html" class="hover:text-red-400 transition">
             Register
           </a>
         </li>
@@ -173,9 +173,9 @@
   </div>
 
 </footer>
-    <script src="../assets/js/config.js"></script>
-    <script src="../assets/js/auth.js"></script>
-    <script src="../assets/js/staff.js"></script> 
+    <script src="../../assets/js/config.js"></script>
+    <script src="../../assets/js/auth.js"></script>
+    <script src="../../assets/js/staff.js"></script> 
     
     <script>
         // منطق فتح قائمة الموبايل
@@ -192,7 +192,7 @@
                 localStorage.removeItem("token");
                 localStorage.removeItem("role");
                 localStorage.removeItem("userName");
-                window.location.href = "../auth/login.html"; 
+                window.location.href = "../../auth/login.html"; 
             };
 
             document.getElementById("staff-logout-btn")?.addEventListener("click", logoutHandler);

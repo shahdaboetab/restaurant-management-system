@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Manage Menu Items | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+</head>
+
+<body class="bg-gray-100 pt-16">
+
+<nav class="bg-gray-900 fixed top-0 left-0 w-full z-50 shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="dashboard.html" class="text-xl font-bold text-red-500 flex items-center">
+            <i class="fas fa-user-shield mr-2"></i>
+            Admin Dashboard
+        </a>
+        <ul class="hidden md:flex space-x-6 text-gray-300 font-medium">
+            <li>
+                <a href="dashboard.html" class="hover:text-red-400 transition">
+                    <i class="fas fa-chart-line mr-1"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="manage-menu.html" class="text-white bg-red-800 px-3 py-1 rounded transition">
+                    <i class="fas fa-utensils mr-1"></i> Menu Items
+                </a>
+            </li>
+             <li>
+                <a href="user-management.html" class="hover:text-red-400 transition">
+                    <i class="fas fa-users-cog mr-1"></i> Users/Roles
+                </a>
+            </li>
+            <li>
+                <a href="reports.html" class="hover:text-red-400 transition">
+                    <i class="fas fa-file-invoice-dollar mr-1"></i> Reports
+                </a>
+            </li>
+            <li>
+                <button id="adminLogout" class="text-red-400 hover:text-red-600 transition">
+                    <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                </button>
+            </li>
+        </ul>
+        <button id="adminMobileBtn" class="md:hidden text-gray-300 text-2xl">☰</button>
+    </div>
+    <div id="adminMobileMenu" class="hidden md:hidden bg-gray-800 p-4 space-y-3">
+        <a href="dashboard.html" class="block text-gray-300 hover:text-red-400">Dashboard</a>
+        <a href="manage-menu.html" class="block text-gray-300 bg-red-800 p-2 rounded">Menu Items</a>
+        <a href="user-management.html" class="block text-gray-300 hover:text-red-400">Users/Roles</a>
+        <a href="reports.html" class="block text-gray-300 hover:text-red-400">Reports</a>
+        <button id="adminLogoutMobile" class="text-red-400">Logout</button>
+    </div>
+</nav>
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+
+    <h1 class="text-3xl font-bold text-gray-800 mb-6 flex items-center justify-between border-b pb-2">
+        <span><i class="fas fa-utensils mr-3 text-red-600"></i> Manage Menu Items</span>
+        
+        <button 
+            id="open-add-modal" 
+            class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition"
+        >
+            <i class="fas fa-plus mr-1"></i> Add New Item
+        </button>
+    </h1>
+
+    <div id="message-container" class="hidden p-4 mb-4 rounded-lg text-sm"></div>
+
+    <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full leading-normal">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left">ID</th>
+                        <th class="py-3 px-6 text-left">Name</th>
+                        <th class="py-3 px-6 text-left">Category</th>
+                        <th class="py-3 px-6 text-center">Price (SAR)</th>
+                        <th class="py-3 px-6 text-center">Stock</th>
+                        <th class="py-3 px-6 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-items-table-body" class="text-gray-600 text-sm font-light">
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-gray-500">
+                            <i class="fas fa-spinner fa-spin mr-2"></i> Loading menu items...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<div id="item-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full max-w-lg">
+        <h2 id="modal-title" class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Add New Menu Item</h2>
+        
+        <form id="item-form" class="space-y-4">
+            
+            <input type="hidden" id="item-id" name="id">
+
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    required 
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                >
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea 
+                    id="description" 
+                    name="description" 
+                    rows="3" 
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                ></textarea>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="price" class="block text-sm font-medium text-gray-700">Price (SAR)</label>
+                    <input 
+                        type="number" 
+                        id="price" 
+                        name="price" 
+                        required 
+                        min="0.01"
+                        step="0.01"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                    >
+                </div>
+                
+                <div>
+                    <label for="available-stock" class="block text-sm font-medium text-gray-700">Available Stock</label>
+                    <input 
+                        type="number" 
+                        id="available-stock" 
+                        name="available-stock" 
+                        required 
+                        min="0"
+                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                    >
+                </div>
+            </div>
+
+            <div>
+                <label for="category-id" class="block text-sm font-medium text-gray-700">Category</label>
+                <select 
+                    id="category-id" 
+                    name="category-id" 
+                    required 
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                >
+                    <option value="">Loading Categories...</option>
+                    </select>
+            </div>
+            
+            <div>
+                <label for="image-url" class="block text-sm font-medium text-gray-700">Image URL</label>
+                <input 
+                    type="url" 
+                    id="image-url" 
+                    name="image-url" 
+                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-red-500 focus:border-red-500"
+                >
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+                <button 
+                    type="button" 
+                    id="close-modal" 
+                    class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+                >
+                    Cancel
+                </button>
+                <button 
+                    type="submit" 
+                    id="save-item-btn" 
+                    class="px-4 py-2 text-white bg-red-600 rounded-lg hover:bg-red-700 transition"
+                >
+                    <i class="fas fa-save mr-1"></i> Save Item
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<footer class="bg-gray-900 text-gray-300 mt-16">
+  
+  <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Restaurant Info -->
+    <div>
+      <h3 class="text-xl font-bold text-white mb-4">
+        🍽️ Smart Restaurant
+      </h3>
+      <p class="text-sm text-gray-400">
+        A smart restaurant management & online ordering system
+        designed to simplify restaurant operations and enhance
+        customer experience.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h4 class="text-lg font-semibold text-white mb-4">
+        Quick Links
+      </h4>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="/index.html" class="hover:text-red-400 transition">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="../customer/menu.html" class="hover:text-red-400 transition">
+            Menu
+          </a>
+        </li>
+        <li>
+          <a href="../../auth/login.html" class="hover:text-red-400 transition">
+            Login
+          </a>
+        </li>
+        <li>
+          <a href="../../auth/register.html" class="hover:text-red-400 transition">
+            Register
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Contact & Social -->
+    <div>
+      <h4 class="text-lg font-semibold text-white mb-4">
+        Contact Us
+      </h4>
+
+      <p class="text-sm mb-2">
+        <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+        Cairo, Egypt
+      </p>
+
+      <p class="text-sm mb-2">
+        <i class="fas fa-phone text-red-400 mr-2"></i>
+        +20 123 456 789
+      </p>
+
+      <p class="text-sm mb-4">
+        <i class="fas fa-envelope text-red-400 mr-2"></i>
+        support@smartrestaurant.com
+      </p>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-4 text-lg">
+        <a href="#" class="hover:text-blue-500 transition">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="hover:text-pink-500 transition">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="hover:text-blue-400 transition">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="hover:text-red-500 transition">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-gray-700 py-4 text-center text-sm text-gray-400">
+    © 2025 Smart Restaurant System. All Rights Reserved.
+  </div>
+
+</footer>
+
+<script src="../../assets/js/config.js"></script>
+<script src="../../assets/js/auth.js"></script> 
+<script src="../../assets/js/manage-menu.js"></script> 
+
+<script>
+    // Navbar & Logout Logic (Inline for simplicity)
+    const role = localStorage.getItem("role");
+    if (role !== "ADMIN") {
+        window.location.href = "../../auth/login.html"; 
+    }
+
+    const adminName = localStorage.getItem("userName");
+    if (adminName) {
+        document.querySelector('.text-red-500').textContent = `Admin Dashboard (${adminName})`;
+    }
+
+    function logoutAdmin() {
+        localStorage.clear();
+        window.location.href = "../../auth/login.html";
+    }
+
+    document.getElementById("adminLogout")?.addEventListener("click", logoutAdmin);
+    document.getElementById("adminLogoutMobile")?.addEventListener("click", logoutAdmin);
+
+    document.getElementById("adminMobileBtn")?.addEventListener("click", () => {
+        document.getElementById("adminMobileMenu").classList.toggle("hidden");
+    });
+</script>
+
+</body>
+</html>

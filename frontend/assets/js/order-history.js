@@ -4,7 +4,7 @@ const loadingMessage = document.getElementById("loading-message");
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = "../auth/login.html";
+    window.location.href = "../../auth/login.html";
     return {};
   }
   return {
