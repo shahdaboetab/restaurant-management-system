@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدفع</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/customer.css" />
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <div id="navbar"></div>
+
+  <main class="container mx-auto px-4 py-8 max-w-3xl">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
+      <i class="fas fa-credit-card text-green-600 mr-3"></i>
+      تأكيد الطلب
+    </h2>
+
+    <!-- Order Summary -->
+    <div class="bg-white p-6 rounded-xl shadow mb-6">
+      <h3 class="text-xl font-bold mb-4">ملخص الطلب</h3>
+      <div id="checkout-items" class="space-y-3"></div>
+
+      <div class="border-t mt-4 pt-4 text-xl font-bold">
+        الإجمالي: <span id="checkout-total">0</span> EGY
+      </div>
+    </div>
+
+    <!-- Place Order -->
+    <button
+      id="place-order-btn"
+      class="w-full bg-green-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-green-700 transition">
+      تأكيد الطلب
+    </button>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/checkout.js"></script>
+
+  <script>
+    async function includeComponent(id, file) {
+      const html = await fetch(file).then(res => res.text());
+      document.getElementById(id).innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      includeComponent("navbar", "../components/navbar.html");
+      includeComponent("footer", "../components/footer.html");
+    });
+  </script>
+
+</body>
+</html>
+
+

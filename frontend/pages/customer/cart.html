@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>سلة المشتريات</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../assets/css/customer.css" />
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <div id="navbar"></div>
+
+  <main class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
+      <i class="fas fa-shopping-cart text-green-600 mr-3"></i>
+      سلة المشتريات
+    </h2>
+
+    <div id="cart-items" class="space-y-4"></div>
+
+    <div id="cart-summary" class="mt-6 bg-white p-6 rounded-xl shadow-lg hidden">
+      <p class="text-xl font-bold mb-4">
+        الإجمالي: <span id="total-price">0</span> SAR
+      </p>
+      <a href="checkout.html"
+         class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition">
+        المتابعة للدفع
+      </a>
+    </div>
+
+    <p id="empty-cart" class="text-center text-gray-500 text-xl hidden">
+      🛒 السلة فارغة
+    </p>
+  </main>
+
+  <div id="footer"></div>
+
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/cart.js"></script>
+
+  <script>
+    async function includeComponent(id, file) {
+      const html = await fetch(file).then(res => res.text());
+      document.getElementById(id).innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      includeComponent("navbar", "../components/navbar.html");
+      includeComponent("footer", "../components/footer.html");
+    });
+  </script>
+
+</body>
+</html>
