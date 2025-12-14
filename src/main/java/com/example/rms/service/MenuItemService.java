@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,14 +47,14 @@ public class MenuItemService {
         return menuItemRepository.findAll()
         .stream()
         .map(MenuItemDto::fromEntityToDto)
-        .toList();
+       .collect(Collectors.toList());
     }
 
     public List<MenuItemDto> getMenuItemByCategory(int categoryId){
         return menuItemRepository.findByCategoryId(categoryId)
                 .stream()
                 .map(MenuItemDto::fromEntityToDto)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     public MenuItemDto updateMenuItem(int id, MenuItemDto newData){

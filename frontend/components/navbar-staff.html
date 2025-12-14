@@ -1,0 +1,86 @@
+<nav class="bg-red-600 shadow-xl fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        
+        <a href="../../frontend/pages/staff/orders.html" class="text-2xl font-bold text-white tracking-wide flex items-center">
+            <i class="fas fa-concierge-bell mr-2"></i> 
+            Staff Dashboard
+        </a>
+
+        <ul class="hidden md:flex space-x-6 text-white font-medium">
+
+            <li>
+                <a 
+                    href="/staff/orders.html" 
+                    class="hover:bg-red-700 px-3 py-2 rounded transition flex items-center"
+                >
+                    <i class="fas fa-list-alt mr-2"></i>
+                    Current Orders
+                </a>
+            </li>
+
+            <li class="flex items-center space-x-4">
+                <span id="staff-name" class="text-white text-lg font-semibold">
+                    Hello, Staff
+                </span>
+                <button 
+                    id="staff-logout-btn" 
+                    class="bg-white text-red-600 font-semibold py-1 px-4 rounded hover:bg-gray-100 transition"
+                >
+                    <i class="fas fa-sign-out-alt"></i> 
+                    Logout
+                </button>
+            </li>
+        </ul>
+
+        <button id="mobile-btn-staff" class="md:hidden text-white text-2xl">
+            ☰
+        </button>
+    </div>
+
+    <div id="mobile-menu-staff" class="hidden md:hidden bg-red-700 border-t p-4 space-y-3">
+        <a href="../pages/staff/orders.html" class="block text-white hover:bg-red-600 p-2 rounded">
+            <i class="fas fa-list-alt mr-2"></i>
+            Current Orders
+        </a>
+        <a href="../auth/register.html" id="mobile-staff-logout-btn" class="block text-white hover:bg-red-600 p-2 rounded">
+             <i class="fas fa-sign-out-alt mr-2"></i> 
+             Logout
+        </a>
+    </div>
+</nav>
+
+<script>
+    // Mobile menu toggle logic
+    const staffBtn = document.getElementById("mobile-btn-staff");
+    const staffMenu = document.getElementById("mobile-menu-staff");
+    staffBtn?.addEventListener("click", () => {
+        staffMenu?.classList.toggle("hidden");
+    });
+    
+    // Logout button handler
+    function setupStaffLogout() {
+        const logoutHandler = (e) => {
+            e.preventDefault();
+            // Clear authentication data
+            localStorage.removeItem("token");
+            localStorage.removeItem("role");
+            localStorage.removeItem("userName"); // Clear stored user name if exists
+            // Redirect to the login page
+            window.location.href = "../auth/login.html"; 
+        };
+
+        document.getElementById("staff-logout-btn")?.addEventListener("click", logoutHandler);
+        document.getElementById("mobile-staff-logout-btn")?.addEventListener("click", logoutHandler);
+        
+        // Display user name
+        const userName = localStorage.getItem("userName");
+        if(userName) {
+            document.getElementById("staff-name").textContent = `Hello, ${userName}`;
+        } else {
+            document.getElementById("staff-name").textContent = `Hello, Staff`;
+        }
+    }
+    
+    // Defer setup until the component is fully loaded
+    window.addEventListener('load', setupStaffLogout);
+</script>
