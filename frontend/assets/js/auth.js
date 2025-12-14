@@ -92,7 +92,7 @@ if (registerForm) {
 
       // Redirect to login page
       setTimeout(() => {
-        window.location.href = "login.html";
+        window.location.href = "./auth/login.html";
       }, 1500);
     } catch (error) {
       errorMessage.textContent =
