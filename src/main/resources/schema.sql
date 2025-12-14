@@ -1,4 +1,4 @@
-USE restaurant_management_system;
+use rms_db;
 -- Create users table
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
