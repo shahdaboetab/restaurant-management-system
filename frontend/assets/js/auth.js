@@ -10,8 +10,7 @@ if (loginForm) {
 
     const username = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
-
+    
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.classList.add("hidden");
 
@@ -19,7 +18,8 @@ if (loginForm) {
       const response = await fetch(`${BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, role }),
+        // تم التعديل: إرسال اسم المستخدم وكلمة المرور فقط
+        body: JSON.stringify({ username, password }),
       });
 
       if (!response.ok) {
@@ -30,7 +30,7 @@ if (loginForm) {
 
       // Save token & role
       localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
+      localStorage.setItem("role", data.role); // السيرفر هو من يرسل الـ role هنا
 
       // Redirect based on role
       if (data.role === "CUSTOMER") {
@@ -41,7 +41,8 @@ if (loginForm) {
         window.location.href = "../admin/dashboard.html";
       }
     } catch (error) {
-      errorMessage.textContent = "Invalid username or password";
+      console.error(error); // طباعة الخطأ في الكونسول للمساعدة
+      errorMessage.textContent = "اسم المستخدم أو كلمة المرور غير صحيحة";
       errorMessage.classList.remove("hidden");
     }
   });
@@ -60,7 +61,7 @@ if (registerForm) {
     const username = document.getElementById("username").value.trim();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-    const role = document.getElementById("role").value;
+    const role = document.getElementById("role").value; // هنا نحتاج الـ role لأننا ننشئ حساباً جديداً
 
     const errorMessage = document.getElementById("errorMessage");
     const successMessage = document.getElementById("successMessage");
@@ -85,7 +86,7 @@ if (registerForm) {
       }
 
       successMessage.textContent =
-        "Account created successfully. Redirecting to login...";
+        "تم إنشاء الحساب بنجاح! جاري التوجيه لتسجيل الدخول...";
       successMessage.classList.remove("hidden");
 
       registerForm.reset();
@@ -96,7 +97,7 @@ if (registerForm) {
       }, 1500);
     } catch (error) {
       errorMessage.textContent =
-        "Registration failed. Try another username or email.";
+        "فشل التسجيل. ربما اسم المستخدم موجود مسبقاً.";
       errorMessage.classList.remove("hidden");
     }
   });
