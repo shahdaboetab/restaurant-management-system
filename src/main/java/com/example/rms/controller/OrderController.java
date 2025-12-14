@@ -36,8 +36,11 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
-        return orderService.getAllOrders();
+    public List<Order> getAllOrders(@RequestParam(required = false) String status) {
+    if (status != null) {
+        return orderService.getOrdersByStatus(status); 
+    }
+    return orderService.getAllOrders();
     }
 
     @PutMapping("/{id}/status")

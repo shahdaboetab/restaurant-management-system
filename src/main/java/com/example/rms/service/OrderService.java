@@ -140,8 +140,12 @@ public class OrderService {
         return orderRepo.findByCustomerId(userId);
     }
 
-    public List<Order> getOrderByStatus(String status) {
-       return orderRepo.findByStatus(OrderStatus.valueOf(status.toUpperCase()));
+    public List<Order> getOrdersByStatus(String status) {
+    try {
+        return orderRepo.findByStatus(OrderStatus.valueOf(status.toUpperCase()));
+    } catch (IllegalArgumentException e) {
+        throw new RuntimeException("Invalid order status: " + status);
+    }
     }
 
     private double calculateTotalPrice(Order order) {

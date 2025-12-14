@@ -40,24 +40,32 @@ function createOrderCard(order) {
   // Check if staff can update the status (only if not completed)
   const canUpdate = order.status !== "COMPLETED";
 
+  // تصحيح: التعامل مع عدم وجود اسم العميل وعرض الرقم بدلاً منه
+  const customerDisplay = order.customerName 
+    ? order.customerName 
+    : (order.customerId ? `عميل رقم ${order.customerId}` : "غير معروف");
+
   const card = document.createElement("div");
   card.className =
     "bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 border-t-4 border-red-500";
+  
+  // تصحيح: استخدام order.orderId بدلاً من order.id
+  // تصحيح: استخدام order.createdAt بدلاً من order.timestamp
   card.innerHTML = `
         <div class="flex justify-between items-start mb-4">
             <h3 class="text-xl font-bold text-gray-800">طلب رقم #${
-              order.id
+              order.orderId
             }</h3>
             <span class="${color} text-white text-xs font-semibold px-3 py-1 rounded-full uppercase">${text}</span>
         </div>
         
         <p class="text-sm text-gray-600 mb-2">
             <i class="fas fa-user-tag mr-2 text-red-500"></i>
-            العميل: ${order.customerName || "غير متوفر"}
+            العميل: ${customerDisplay}
         </p>
         <p class="text-sm text-gray-600 mb-2">
             <i class="fas fa-clock mr-2 text-red-500"></i>
-            الوقت: ${new Date(order.timestamp).toLocaleString()}
+            الوقت: ${new Date(order.createdAt).toLocaleString()}
         </p>
         <p class="text-lg font-bold text-gray-800 mb-4">
             <i class="fas fa-money-bill-wave mr-2 text-red-500"></i>
@@ -69,7 +77,7 @@ function createOrderCard(order) {
               canUpdate
                 ? `
                 <button 
-                    data-order-id="${order.id}" 
+                    data-order-id="${order.orderId}" 
                     class="view-order-btn w-full bg-red-600 text-white py-2 rounded-lg font-semibold hover:bg-red-700 transition"
                 >
                     <i class="fas fa-cogs mr-2"></i> 
@@ -95,8 +103,8 @@ async function fetchOrders(statusFilter) {
 
   try {
     // Base URL will fetch all orders or assigned orders (Backend handles authorization)
-    // We assume the backend has an endpoint like /staff/orders?status=PENDING
-    const url = `${BASE_URL}/staff/orders?status=${statusFilter}`;
+    // Correct Endpoint: /api/orders
+    const url = `${BASE_URL}/api/orders?status=${statusFilter}`;
 
     const response = await fetch(url, {
       method: "GET",
@@ -130,9 +138,13 @@ async function fetchOrders(statusFilter) {
     // Add event listeners for the 'Update Status' buttons
     document.querySelectorAll(".view-order-btn").forEach((button) => {
       button.addEventListener("click", (e) => {
-        const orderId = e.target.getAttribute("data-order-id");
-        // Redirect to the update page with the Order ID
-        window.location.href = `update-order.html?orderId=${orderId}`;
+        // تصحيح: استخدام الزر نفسه وليس e.target مباشرة لتجنب المشاكل إذا ضغط المستخدم على الأيقونة داخل الزر
+        const btn = e.target.closest('.view-order-btn');
+        if (btn) {
+            const orderId = btn.getAttribute("data-order-id");
+            // Redirect to the update page with the Order ID
+            window.location.href = `update-order.html?orderId=${orderId}`;
+        }
       });
     });
   } catch (error) {
@@ -170,7 +182,3 @@ document.querySelectorAll(".tab-button").forEach((button) => {
     fetchOrders(selectedStatus);
   });
 });
-
-// Optional: Real-time notification logic (Requires WebSocket integration with backend)
-// This part is complex and should be implemented using WebSockets (Spring Boot side)
-// to meet the real-time requirement.
