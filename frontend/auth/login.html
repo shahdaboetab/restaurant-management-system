@@ -1,95 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login | Smart Restaurant</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-..."
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Smart Restaurant</title>
 
-    <link rel="stylesheet" href="" />
-    <script src="https://cdn.tailwindcss.com"></script>
-  </head>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
 
-  <body class="bg-gray-100 min-h-screen">
-    <!-- Navbar -->
-    <div id="navbar"></div>
+<body class="bg-gray-100 min-h-screen">
+  <div id="navbar"></div>
 
-    <!-- Login Section -->
-    <div class="flex items-center justify-center min-h-screen pt-24">
-      <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
-        <h2 class="text-3xl font-bold text-center text-red-600 mb-6">
-          Smart Restaurant 🍽️
-        </h2>
+  <div class="flex items-center justify-center min-h-screen pt-24">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
 
-        <form id="loginForm" class="space-y-5">
-          <!-- Email -->
-          <div>
-            <label class="block text-gray-700 font-medium mb-1">Email</label>
-            <input
-              type="email"
-              required
-              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
-            />
-          </div>
+      <h2 class="text-3xl font-bold text-center text-red-600 mb-6">
+        Smart Restaurant 🍽️
+      </h2>
 
-          <!-- Password -->
-          <div>
-            <label class="block text-gray-700 font-medium mb-1">Password</label>
-            <input
-              type="password"
-              required
-              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400"
-            />
-          </div>
+      <form id="loginForm" class="space-y-5">
 
-          <!-- Role Selection -->
-          <div>
-            <label class="block text-gray-700 font-medium mb-1">Login As</label>
-            <select
-              class="w-full px-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-red-400"
-            >
-              <option value="CUSTOMER">Customer</option>
-              <option value="STAFF">Staff</option>
-              <option value="ADMIN">Admin</option>
-            </select>
-          </div>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">username</label>
+          <input
+            type="text"
+            id="username"
+            required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-400"
+          />
+        </div>
 
-          <!-- Login Button -->
-          <button
-            type="submit"
-            class="w-full bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition"
-          >
-            Login
-          </button>
-        </form>
+        <div>
+          <label class="block text-gray-700 font-medium mb-1">Password</label>
+          <input
+            type="password"
+            id="password"
+            required
+            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-red-400"
+          />
+        </div>
 
-        <p class="text-center text-gray-500 mt-4 text-sm">
-          Don't have an account?
-          <a href="register.html" class="text-red-500 hover:underline"
-            >Register</a
-          >
-        </p>
-      </div>
+        <p id="errorMessage" class="text-red-500 text-sm font-semibold hidden"></p>
+
+        <button
+          type="submit"
+          class="w-full bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition"
+        >
+          Login
+        </button>
+      </form>
+
+      <p class="text-center text-gray-500 mt-4 text-sm">
+        Don't have an account?
+        <a href="register.html" class="text-red-500 hover:underline">
+          Register
+        </a>
+      </p>
+
     </div>
+  </div>
 
-    <!-- Footer -->
-    <div id="footer"></div>
+  <div id="footer"></div>
 
-    <!-- Include Navbar & Footer -->
-    <script>
-      async function includeComponent(id, file) {
-        const html = await fetch(file).then((res) => res.text());
-        document.getElementById(id).innerHTML = html;
-      }
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth.js"></script>
 
+  <script>
+    async function includeComponent(id, file) {
+      const html = await fetch(file).then(res => res.text());
+      document.getElementById(id).innerHTML = html;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
       includeComponent("navbar", "../components/navbar.html");
       includeComponent("footer", "../components/footer.html");
-    </script>
-  </body>
+    });
+  </script>
+</body>
 </html>

@@ -29,9 +29,8 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@RequestBody LoginRequest req) {
-        String token = authService.login(req.getUsername(), req.getPassword());
-        String role = authService.getUserRole(req.getUsername()); 
-        return new AuthResponse(token, role);
+        AuthResponse response = authService.loginWithUserDetails(req.getUsername(), req.getPassword());
+        return response;
     }
 
     @GetMapping("/me")

@@ -50,11 +50,10 @@ public class CategoryDto {
     }
 
     public Category fromDtoToEntity() {
-        Category entity = new Category();
-        entity.setId(this.id);
-        entity.setName(this.name);
-        entity.setDescription(this.description);
-        return entity;
+        return new Category.Builder()
+            .name(this.name)
+            .description(this.description)
+            .build();
     }
 }
 

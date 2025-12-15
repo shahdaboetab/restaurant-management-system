@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Orders Dashboard</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    
+    <link rel="stylesheet" href="../assets/css/staff.css" /> 
+</head>
+
+<body class="bg-gray-100 min-h-screen pt-16">
+    
+    <nav class="bg-red-600 shadow-xl fixed top-0 left-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            
+            <a href="orders.html" class="text-2xl font-bold text-white tracking-wide flex items-center">
+                <i class="fas fa-concierge-bell mr-2"></i> 
+                Staff Dashboard
+            </a>
+
+            <ul class="hidden md:flex space-x-6 text-white font-medium">
+
+                <li>
+                    <a 
+                        href="orders.html" 
+                        class="hover:bg-red-700 px-3 py-2 rounded transition flex items-center font-bold"
+                    >
+                        <i class="fas fa-list-alt mr-2"></i>
+                        Current Orders
+                    </a>
+                </li>
+
+                <li class="flex items-center space-x-4">
+                    <span id="staff-name" class="text-white text-lg font-semibold">
+                        Hello, Staff
+                    </span>
+                    <button 
+                        id="staff-logout-btn" 
+                        class="bg-white text-red-600 font-semibold py-1 px-4 rounded hover:bg-gray-100 transition"
+                    >
+                        <i class="fas fa-sign-out-alt"></i> 
+                        Logout
+                    </button>
+                </li>
+            </ul>
+
+            <button id="mobile-btn-staff" class="md:hidden text-white text-2xl">
+                ☰
+            </button>
+        </div>
+
+        <div id="mobile-menu-staff" class="hidden md:hidden bg-red-700 border-t p-4 space-y-3">
+            <a href="orders.html" class="block text-white hover:bg-red-600 p-2 rounded">
+                <i class="fas fa-list-alt mr-2"></i>
+                Current Orders
+            </a>
+            <a href="#" id="mobile-staff-logout-btn-mobile" class="block text-white hover:bg-red-600 p-2 rounded">
+                <i class="fas fa-sign-out-alt mr-2"></i> 
+                Logout
+            </a>
+        </div>
+    </nav>
+    <main class="container mx-auto px-4 py-8">
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2 flex items-center">
+            <i class="fas fa-concierge-bell text-red-600 mr-3"></i> 
+            Staff Orders Dashboard
+        </h2>
+
+        <div class="flex space-x-4 mb-6 border-b border-red-200">
+            </div>
+
+        <div id="orders-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <p id="loading-message" class="col-span-full text-center text-lg text-gray-500">Loading Orders...</p>
+        </div>
+
+    </main>
+
+    <footer class="bg-gray-900 text-gray-300 mt-16">
+  
+  <div class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+    <!-- Restaurant Info -->
+    <div>
+      <h3 class="text-xl font-bold text-white mb-4">
+        🍽️ Smart Restaurant
+      </h3>
+      <p class="text-sm text-gray-400">
+        A smart restaurant management & online ordering system
+        designed to simplify restaurant operations and enhance
+        customer experience.
+      </p>
+    </div>
+
+    <!-- Quick Links -->
+    <div>
+      <h4 class="text-lg font-semibold text-white mb-4">
+        Quick Links
+      </h4>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="/index.html" class="hover:text-red-400 transition">
+            Home
+          </a>
+        </li>
+        <li>
+          <a href="../../frontend/pages/customer/menu.html" class="hover:text-red-400 transition">
+            Menu
+          </a>
+        </li>
+        <li>
+          <a href="../../frontend/auth/login.html" class="hover:text-red-400 transition">
+            Login
+          </a>
+        </li>
+        <li>
+          <a href="../../frontend/auth/register.html" class="hover:text-red-400 transition">
+            Register
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Contact & Social -->
+    <div>
+      <h4 class="text-lg font-semibold text-white mb-4">
+        Contact Us
+      </h4>
+
+      <p class="text-sm mb-2">
+        <i class="fas fa-map-marker-alt text-red-400 mr-2"></i>
+        Cairo, Egypt
+      </p>
+
+      <p class="text-sm mb-2">
+        <i class="fas fa-phone text-red-400 mr-2"></i>
+        +20 123 456 789
+      </p>
+
+      <p class="text-sm mb-4">
+        <i class="fas fa-envelope text-red-400 mr-2"></i>
+        support@smartrestaurant.com
+      </p>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-4 text-lg">
+        <a href="#" class="hover:text-blue-500 transition">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="#" class="hover:text-pink-500 transition">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="hover:text-blue-400 transition">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="#" class="hover:text-red-500 transition">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-gray-700 py-4 text-center text-sm text-gray-400">
+    © 2025 Smart Restaurant System. All Rights Reserved.
+  </div>
+
+</footer>
+    <script src="../assets/js/config.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/staff.js"></script> 
+    
+    <script>
+        // منطق فتح قائمة الموبايل
+        const staffBtn = document.getElementById("mobile-btn-staff");
+        const staffMenu = document.getElementById("mobile-menu-staff");
+        staffBtn?.addEventListener("click", () => {
+            staffMenu?.classList.toggle("hidden");
+        });
+        
+        // ربط زر تسجيل الخروج
+        function setupStaffLogout() {
+            const logoutHandler = (e) => {
+                e.preventDefault();
+                localStorage.removeItem("token");
+                localStorage.removeItem("role");
+                localStorage.removeItem("userName");
+                window.location.href = "../auth/login.html"; 
+            };
+
+            document.getElementById("staff-logout-btn")?.addEventListener("click", logoutHandler);
+            document.getElementById("mobile-staff-logout-btn-mobile")?.addEventListener("click", logoutHandler);
+            
+            // عرض اسم المستخدم
+            const userName = localStorage.getItem("userName");
+            if(userName) {
+                document.getElementById("staff-name").textContent = `Hello, ${userName}`;
+            } else {
+                document.getElementById("staff-name").textContent = `Hello, Staff`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', setupStaffLogout);
+    </script>
+</body>
+</html>

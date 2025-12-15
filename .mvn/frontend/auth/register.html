@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  />
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <!-- Register Form -->
+  <main class="flex-grow flex items-center justify-center mt-20 mb-10">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+
+      <h2 class="text-2xl font-bold text-center text-red-600 mb-6">
+        Create Account
+      </h2>
+
+      <form id="registerForm" class="space-y-4">
+
+        <input
+          type="text"
+          id="username"
+          placeholder="Username"
+          required
+          class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-red-400"
+        />
+
+        <input
+          type="email"
+          id="email"
+          placeholder="Email"
+          required
+          class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-red-400"
+        />
+
+        <input
+          type="password"
+          id="password"
+          placeholder="Password"
+          required
+          class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-red-400"
+        />
+
+        <select
+          id="role"
+          required
+          class="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-red-400"
+        >
+          <option value="">Select Role</option>
+          <option value="CUSTOMER">Customer</option>
+          <option value="STAFF">Staff</option>
+        </select>
+
+        <p id="errorMessage" class="text-red-500 text-sm hidden"></p>
+        <p id="successMessage" class="text-green-500 text-sm hidden"></p>
+
+        <button
+          type="submit"
+          class="w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+        >
+          Register
+        </button>
+      </form>
+
+      <p class="text-center text-sm mt-4">
+        Already have an account?
+        <a href="login.html" class="text-red-500 hover:underline">Login</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Scripts -->
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth.js"></script>
+
+  <!-- Load Navbar & Footer -->
+  <script>
+    fetch("../components/navbar.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("navbar").innerHTML = data);
+
+    fetch("../components/footer.html")
+      .then(res => res.text())
+      .then(data => document.getElementById("footer").innerHTML = data);
+  </script>
+
+</body>
+</html>

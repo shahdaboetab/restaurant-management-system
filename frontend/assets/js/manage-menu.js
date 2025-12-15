@@ -1,5 +1,3 @@
-// ملف: ../assets/js/manage-menu.js
-
 const menuItemsTableBody = document.getElementById("menu-items-table-body");
 const itemModal = document.getElementById("item-modal");
 const modalTitle = document.getElementById("modal-title");
@@ -38,7 +36,7 @@ function showMessage(text, isError = false) {
 // Fetch Categories and populate the select dropdown
 async function fetchCategories() {
   try {
-    const response = await fetch(`${BASE_URL}/admin/categories`, {
+    const response = await fetch(`${BASE_URL}/api/categories`, {  // تعديل هنا
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch categories.");
@@ -61,11 +59,11 @@ async function fetchCategories() {
 
 // Fetch Menu Items and render the table
 async function fetchMenuItems() {
-  menuItemsTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-gray-500">
+  menuItemsTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-gray-500">
                                       <i class="fas fa-spinner fa-spin mr-2"></i> Loading menu items...
                                    </td></tr>`;
   try {
-    const response = await fetch(`${BASE_URL}/admin/menu`, {
+    const response = await fetch(`${BASE_URL}/api/menu-items`, {  // تعديل هنا
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch menu items.");
@@ -74,7 +72,7 @@ async function fetchMenuItems() {
     renderTable(menuItems);
   } catch (error) {
     console.error("Menu Items Fetch Error:", error);
-    menuItemsTableBody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-red-500 font-bold">
+    menuItemsTableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-500 font-bold">
                                             Error: Could not load menu items.
                                         </td></tr>`;
     showMessage("Error loading menu items. Check network connection.", true);
@@ -97,23 +95,12 @@ function renderTable(items) {
             <td class="py-3 px-6 text-left">${item.name}</td>
             <td class="py-3 px-6 text-left">${item.categoryName || "N/A"}</td>
             <td class="py-3 px-6 text-center">${item.price.toFixed(2)}</td>
-            <td class="py-3 px-6 text-center ${
-              item.availableStock === 0
-                ? "text-red-500 font-bold"
-                : "text-green-600"
-            }">
-                ${item.availableStock}
-            </td>
             <td class="py-3 px-6 text-center">
                 <div class="flex item-center justify-center space-x-3">
-                    <button class="edit-btn text-blue-600 hover:text-blue-800" data-id="${
-                      item.id
-                    }" data-item='${JSON.stringify(item)}'>
+                    <button class="edit-btn text-blue-600 hover:text-blue-800" data-id="${item.id}" data-item='${JSON.stringify(item)}'>
                         <i class="fas fa-edit"></i> Edit
                     </button>
-                    <button class="delete-btn text-red-600 hover:text-red-800" data-id="${
-                      item.id
-                    }">
+                    <button class="delete-btn text-red-600 hover:text-red-800" data-id="${item.id}">
                         <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
@@ -149,6 +136,10 @@ function closeModal() {
   itemModal.classList.remove("flex");
   isEditMode = false;
   currentItemId = null;
+  // Clear file input
+  document.getElementById("image-file").value = "";
+  // Hide current image container
+  document.getElementById("current-image-container").classList.add("hidden");
 }
 
 document.getElementById("open-add-modal").addEventListener("click", () => {
@@ -170,13 +161,24 @@ function openModalForEdit(item) {
   document.getElementById("name").value = item.name;
   document.getElementById("description").value = item.description || "";
   document.getElementById("price").value = item.price;
-  document.getElementById("available-stock").value = item.availableStock;
-  document.getElementById("image-url").value = item.imageUrl || "";
 
   // Select the correct category
   if (item.categoryId) {
     document.getElementById("category-id").value = item.categoryId;
   }
+
+  // Handle current image display
+  const currentImageContainer = document.getElementById("current-image-container");
+  const currentImage = document.getElementById("current-image");
+  if (item.imageUrl) {
+    currentImage.src = item.imageUrl;
+    currentImageContainer.classList.remove("hidden");
+  } else {
+    currentImageContainer.classList.add("hidden");
+  }
+
+  // Clear file input for edit mode (user can choose to upload new image or keep existing)
+  document.getElementById("image-file").value = "";
 }
 
 // ------------------------------------
@@ -186,41 +188,115 @@ function openModalForEdit(item) {
 itemForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const itemData = {
-    name: document.getElementById("name").value,
-    description: document.getElementById("description").value,
-    price: parseFloat(document.getElementById("price").value),
-    availableStock: parseInt(document.getElementById("available-stock").value),
-    categoryId: parseInt(document.getElementById("category-id").value), // Assuming categoryId is needed by backend
-    imageUrl: document.getElementById("image-url").value || null,
-  };
-
   const itemId = document.getElementById("item-id").value;
-  const method = isEditMode ? "PUT" : "POST";
-  const url = isEditMode
-    ? `${BASE_URL}/admin/menu/${itemId}`
-    : `${BASE_URL}/admin/menu`;
+  const isEditMode = itemId !== "";
 
-  try {
-    const response = await fetch(url, {
-      method: method,
-      headers: getAuthHeaders(),
-      body: JSON.stringify(itemData),
-    });
+  if (isEditMode) {
+    // Edit mode - send JSON data
+    const itemData = {
+      name: document.getElementById("name").value,
+      description: document.getElementById("description").value,
+      price: parseFloat(document.getElementById("price").value),
+      categoryId: parseInt(document.getElementById("category-id").value),
+      imageUrl: null // Will be handled by checking if new file is uploaded
+    };
 
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(
-        error.message || `Failed to ${isEditMode ? "update" : "add"} item.`
-      );
+    // Check if a new image file is selected
+    const imageFile = document.getElementById("image-file").files[0];
+    if (imageFile) {
+      // If new file is uploaded, we need to use the upload endpoint
+      const formData = new FormData();
+      formData.append("name", itemData.name);
+      formData.append("description", itemData.description);
+      formData.append("price", itemData.price);
+      formData.append("categoryId", itemData.categoryId);
+      formData.append("imageFile", imageFile);
+
+      try {
+        const headers = getAuthHeaders();
+        delete headers["Content-Type"];
+
+        const response = await fetch(`${BASE_URL}/api/menu-items/upload`, {
+          method: "POST",
+          headers: headers,
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Failed to update item.");
+        }
+
+        // After successful upload, we need to update the existing item with the new data
+        // But since upload creates a new item, we need to delete the old one and update with new ID
+        // This is a limitation - let's use a different approach
+
+        showMessage("Image update requires recreating the item. Please delete and re-add the item with new image.", true);
+        closeModal();
+        return;
+
+      } catch (error) {
+        console.error("Update Item Error:", error);
+        showMessage(error.message, true);
+        return;
+      }
+    } else {
+      // No new image - update other fields only
+      try {
+        const response = await fetch(`${BASE_URL}/api/menu-items/${itemId}`, {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(itemData),
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || "Failed to update item.");
+        }
+
+        showMessage("Item successfully updated!");
+        closeModal();
+        fetchMenuItems();
+      } catch (error) {
+        console.error("Update Item Error:", error);
+        showMessage(error.message, true);
+      }
+    }
+  } else {
+    // Add mode - use FormData
+    const formData = new FormData();
+    formData.append("name", document.getElementById("name").value);
+    formData.append("description", document.getElementById("description").value);
+    formData.append("price", parseFloat(document.getElementById("price").value));
+    formData.append("categoryId", parseInt(document.getElementById("category-id").value));
+
+    const imageFile = document.getElementById("image-file").files[0];
+    if (imageFile) {
+      formData.append("imageFile", imageFile);
     }
 
-    showMessage(`Item successfully ${isEditMode ? "updated" : "added"}!`);
-    closeModal();
-    fetchMenuItems(); // Refresh the table
-  } catch (error) {
-    console.error("Save Item Error:", error);
-    showMessage(error.message, true);
+    try {
+      const headers = getAuthHeaders();
+      delete headers["Content-Type"];
+
+      const response = await fetch(`${BASE_URL}/api/menu-items/upload`, {
+        method: "POST",
+        headers: headers,
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Failed to add item.");
+      }
+
+      showMessage("Item successfully added!");
+      closeModal();
+      fetchMenuItems();
+    } catch (error) {
+      console.error("Add Item Error:", error);
+      showMessage(error.message, true);
+    }
   }
 });
 
@@ -232,7 +308,7 @@ async function deleteItem(itemId) {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/admin/menu/${itemId}`, {
+    const response = await fetch(`${BASE_URL}/api/menu-items/${itemId}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

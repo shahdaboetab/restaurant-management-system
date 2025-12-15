@@ -68,7 +68,7 @@ async function placeOrder() {
 
 
   try {
-    const response = await fetch(`${BASE_URL}/orders`, {
+    const response = await fetch(`${BASE_URL}/api/orders`, {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify(orderRequest)
@@ -77,11 +77,11 @@ async function placeOrder() {
     if (!response.ok) throw new Error("فشل إنشاء الطلب");
 
     const order = await response.json();
-    alert(`تم إنشاء الطلب #${order.id} بنجاح!`);
+    alert(`تم إنشاء الطلب #${order.orderId} بنجاح!`);
 
     // مسح السلة بعد الطلب
     localStorage.removeItem("cart");
-    window.location.href = `track-order.html?orderId=${order.id}`;
+    window.location.href = `track-order.html?orderId=${order.orderId}`;
 
   } catch (err) {
     console.error(err);

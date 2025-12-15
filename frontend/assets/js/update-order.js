@@ -12,7 +12,7 @@ let currentOrderId = null;
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = "../auth/login.html";
+    window.location.href = "../../auth/login.html";
     return {};
   }
   return {

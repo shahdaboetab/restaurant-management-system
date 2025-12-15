@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.example.rms.dto.OrderItemRequest;
 import com.example.rms.dto.OrderRequest;
 import com.example.rms.entity.MenuItem;
 import com.example.rms.entity.Order;
@@ -33,37 +34,49 @@ public class OrderService {
             throw new RuntimeException("Cannot create an empty order.");
         }
 
+        if (request.getCustomerId() == null) {
+            throw new RuntimeException("Customer ID is required.");
+        }
+
         Order order = new Order();
         order.setCustomerId(request.getCustomerId());
         order.setStatus(OrderStatus.PENDING);
         order.setPaymentStatus(PaymentStatus.UNPAID);
-        order.setPaymentMethod(request.getPaymentMethod());
+        order.setPaymentMethod(request.getPaymentMethod() != null ? request.getPaymentMethod() : "CASH");
 
-        for (OrderItem item : request.getItems()) {
-            
-            if (item.getMenuItemId() == null) {
+        for (OrderItemRequest itemRequest : request.getItems()) {
+
+            if (itemRequest.getMenuItemId() == null) {
                  throw new RuntimeException("Menu Item ID is required!");
             }
 
-            MenuItem realItem = menuItemRepository.findById(item.getMenuItemId())
-                  .orElseThrow(() -> new RuntimeException("Item not found in menu! ID: " + item.getMenuItemId()));
-
-            item.setProductname(realItem.getName()); 
-            item.setPrice(realItem.getPrice());      
-
-    
-            if (item.getQuantity() == null || item.getQuantity() <= 0) {
-                throw new RuntimeException("Quantity must be > 0");
+            if (itemRequest.getQuantity() == null || itemRequest.getQuantity() <= 0) {
+                throw new RuntimeException("Quantity must be greater than 0!");
             }
-            item.setOrder(order);
+
+            MenuItem realItem = menuItemRepository.findById(itemRequest.getMenuItemId())
+                  .orElseThrow(() -> new RuntimeException("Item not found in menu! ID: " + itemRequest.getMenuItemId()));
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setMenuItemId(realItem.getId());
+            orderItem.setProductname(realItem.getName());
+            orderItem.setQuantity(itemRequest.getQuantity());
+            orderItem.setPrice(realItem.getPrice());
+            orderItem.setOrder(order);
+
+            order.getItems().add(orderItem);
         }
 
-        order.setItems(request.getItems());
-        
-        order.setTotalPrice(calculateTotalPrice(order)); 
+        // Calculate total price
+        double totalPrice = order.getItems().stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity())
+                .sum();
+        order.setTotalPrice(totalPrice);
 
         Order savedOrder = orderRepo.save(order);
-        messagingTemplate.convertAndSend("/topic/orders", savedOrder);
+
+        // Notify staff about new order
+        messagingTemplate.convertAndSend("/topic/orders", "New order #" + savedOrder.getOrderId());
 
         return savedOrder;
     }

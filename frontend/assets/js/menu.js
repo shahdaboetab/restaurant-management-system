@@ -4,10 +4,19 @@ const menuList = document.getElementById("menu-list");
 let menu = [];
 
 
+// Event delegation for add to cart buttons
+menuList.addEventListener("click", (e) => {
+  if (e.target.classList.contains("add-to-cart-btn")) {
+    const itemId = e.target.getAttribute("data-id");
+    addToCartById(itemId);
+  }
+});
+
+
 function getAuthHeaders() {
   const token = localStorage.getItem("token");
   if (!token) {
-    window.location.href = "../auth/login.html";
+    window.location.href = "../../auth/login.html";
     return {};
   }
   return { "Content-Type": "application/json", Authorization: `Bearer ${token}` };
@@ -29,14 +38,32 @@ function createMenuCard(item) {
 
 async function fetchCategories() {
   try {
+    console.log("Fetching categories...");
     const response = await fetch(
-      `${BASE_URL}/customer/menu/categories`,
+      `${BASE_URL}/api/customer/menu/categories`,
       { headers: getAuthHeaders() }
     );
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     const categories = await response.json();
+    console.log("Categories loaded:", categories);
 
     categoriesDiv.innerHTML = "";
+
+    if (categories.length === 0) {
+      categoriesDiv.innerHTML = "<p>لا توجد فئات</p>";
+      return;
+    }
+
+    // Add "All Items" button
+    const allBtn = document.createElement("button");
+    allBtn.className = "px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition mr-2";
+    allBtn.textContent = "جميع العناصر";
+    allBtn.addEventListener("click", () => fetchAllItems());
+    categoriesDiv.appendChild(allBtn);
 
     categories.forEach(cat => {
       const btn = document.createElement("button");
@@ -45,6 +72,7 @@ async function fetchCategories() {
       btn.textContent = cat.name;
 
       btn.addEventListener("click", () => {
+        console.log("Category clicked:", cat.id);
         fetchItemsByCategory(cat.id);
       });
 
@@ -52,64 +80,121 @@ async function fetchCategories() {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching categories:", err);
+    categoriesDiv.innerHTML = "<p>خطأ في تحميل الفئات</p>";
   }
 }
 
-async function fetchItemsByCategory(categoryId) {
+async function fetchAllItems() {
   menuList.innerHTML = "<p>جاري التحميل...</p>";
 
   try {
-    const response = await fetch(
-      `${BASE_URL}/customer/menu/categories/${categoryId}/items`,
+    // Fetch all categories first
+    const categoriesResponse = await fetch(
+      `${BASE_URL}/api/customer/menu/categories`,
       { headers: getAuthHeaders() }
     );
 
-    menu = await response.json();
+    if (!categoriesResponse.ok) {
+      throw new Error(`HTTP error! status: ${categoriesResponse.status}`);
+    }
+
+    const categories = await categoriesResponse.json();
+    console.log("All categories for fetching items:", categories);
+
+    // Fetch items from all categories
+    const allItemsPromises = categories.map(cat =>
+      fetch(`${BASE_URL}/api/customer/menu/categories/${cat.id}/items`, {
+        headers: getAuthHeaders()
+      }).then(res => res.json())
+    );
+
+    const allItemsArrays = await Promise.all(allItemsPromises);
+    menu = allItemsArrays.flat(); // Flatten all arrays into one
+
+    console.log("All menu items loaded:", menu);
     menuList.innerHTML = "";
 
     if (menu.length === 0) {
-      menuList.innerHTML = "<p>لا توجد عناصر</p>";
+      menuList.innerHTML = "<p>لا توجد عناصر في أي فئة</p>";
       return;
     }
 
     menu.forEach(item => menuList.appendChild(createMenuCard(item)));
 
-    document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-      btn.addEventListener("click", e => {
-        const itemId = e.target.getAttribute("data-id");
-        addToCartById(itemId);
-      });
-    });
+  } catch (err) {
+    console.error("Error fetching all items:", err);
+    menuList.innerHTML = "<p>خطأ في تحميل العناصر</p>";
+  }
+}
+
+async function fetchItemsByCategory(categoryId) {
+  console.log("Fetching items for category:", categoryId);
+  menuList.innerHTML = "<p>جاري التحميل...</p>";
+
+  try {
+    const response = await fetch(
+      `${BASE_URL}/api/customer/menu/categories/${categoryId}/items`,
+      { headers: getAuthHeaders() }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    menu = await response.json();
+    console.log("Menu items loaded for category:", menu);
+    menuList.innerHTML = "";
+
+    if (menu.length === 0) {
+      menuList.innerHTML = "<p>لا توجد عناصر في هذه الفئة</p>";
+      return;
+    }
+
+    menu.forEach(item => menuList.appendChild(createMenuCard(item)));
 
   } catch (err) {
-    console.error(err);
+    console.error("Error fetching items by category:", err);
+    menuList.innerHTML = "<p>خطأ في تحميل عناصر الفئة</p>";
   }
 }
 
 
 
 function addToCartById(itemId) {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  try {
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const item = menu.find(i => i.id == itemId);
-  if (!item) return;
+    const item = menu.find(i => i.id == itemId);
+    if (!item) {
+      console.error("Item not found in menu:", itemId);
+      alert("خطأ: العنصر غير موجود");
+      return;
+    }
 
-  const existing = cart.find(i => i.id == itemId);
-  if (existing) {
-    existing.quantity++;
-  } else {
-    cart.push({
-      id: item.id,
-      name: item.name,
-      price: item.price,
-      quantity: 1
-    });
+    const existing = cart.find(i => i.id == itemId);
+    if (existing) {
+      existing.quantity++;
+      alert(`تم تحديث الكمية: ${item.name} (الكمية: ${existing.quantity})`);
+    } else {
+      cart.push({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: 1
+      });
+      alert(`تمت إضافة ${item.name} إلى السلة`);
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+    console.log("Cart updated:", cart);
+  } catch (error) {
+    console.error("Error adding to cart:", error);
+    alert("حدث خطأ في إضافة العنصر إلى السلة");
   }
-
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert("تمت الإضافة إلى السلة 🛒");
 }
 
 fetchCategories();
+// Load all items initially so users can add to cart immediately
+fetchAllItems();
 

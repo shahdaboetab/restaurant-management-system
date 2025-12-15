@@ -1,5 +1,6 @@
 package com.example.rms.service;
 
+import com.example.rms.dto.AuthResponse;
 import com.example.rms.entity.Role;
 import com.example.rms.entity.User;
 import com.example.rms.repository.UserRepository;
@@ -45,6 +46,18 @@ public class AuthService {
         }
 
         return jwtUtil.generateToken(user.getUsername(), user.getRole());
+    }
+
+    public AuthResponse loginWithUserDetails(String username, String rawPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        return new AuthResponse(token, user.getRole(), user.getId());
     }
     
     public String getUserRole(String username) {

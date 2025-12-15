@@ -1,5 +1,6 @@
 package com.example.rms.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,10 +22,11 @@ public class OrderItem {
     private String productname;
     private Integer quantity;
     private Double price;
+    @Column(name = "productId")
     private Integer menuItemId;
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orderId")
     @JsonIgnore
     private Order order;
 

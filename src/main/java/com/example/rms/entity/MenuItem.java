@@ -32,12 +32,12 @@ public class MenuItem {
     public MenuItem() {
     }
 
-    public MenuItem(int id, String name, String description, Double price, Category category) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.category = category;
+    private MenuItem(Builder builder) {
+        this.name = builder.name;
+        this.description = builder.description;
+        this.price = builder.price;
+        this.category = builder.category;
+        this.imageUrl = builder.imageUrl;
     }
 
     public int getId() {
@@ -86,6 +86,47 @@ public class MenuItem {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+
+     public static class Builder {
+        private String name;
+        private String description;
+        private Double price;
+        private Category category;
+        private String imageUrl;
+
+        public Builder() {
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder price(Double price) {
+            this.price = price;
+            return this;
+        }
+
+        public Builder category(Category category) {
+            this.category = category;
+            return this;
+        }
+
+        public Builder imageUrl(String imageUrl) {
+            this.imageUrl = imageUrl;
+            return this;
+        }
+
+        public MenuItem build() {
+            return new MenuItem(this);
+        }
     }
 
 

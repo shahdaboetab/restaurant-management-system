@@ -8,19 +8,18 @@ if (loginForm) {
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value.trim();
     
     const errorMessage = document.getElementById("errorMessage");
     errorMessage.classList.add("hidden");
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        // تم التعديل: إرسال اسم المستخدم وكلمة المرور فقط
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(`${BASE_URL}/api/auth/login`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ username: email, password }),
+});
 
       if (!response.ok) {
         throw new Error("Invalid credentials");
@@ -28,17 +27,18 @@ if (loginForm) {
 
       const data = await response.json();
 
-      // Save token & role
+      // Save token, role & userId
       localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role); // السيرفر هو من يرسل الـ role هنا
+      localStorage.setItem("role", data.role);
+      localStorage.setItem("userId", data.userId); // Store user ID for orders
 
-      // Redirect based on role
+      // Redirect based on role - paths relative to auth folder where login is
       if (data.role === "CUSTOMER") {
-        window.location.href = "../customer/menu.html";
+        window.location.href = "../pages/customer/menu.html";
       } else if (data.role === "STAFF") {
-        window.location.href = "../staff/orders.html";
+        window.location.href = "../pages/staff/update-order.html";
       } else if (data.role === "ADMIN") {
-        window.location.href = "../admin/dashboard.html";
+        window.location.href = "../pages/admin/dashboard.html";
       }
     } catch (error) {
       console.error(error); // طباعة الخطأ في الكونسول للمساعدة
@@ -70,7 +70,7 @@ if (registerForm) {
     successMessage.classList.add("hidden");
 
     try {
-      const response = await fetch(`${BASE_URL}/auth/register`, {
+      const response = await fetch(`${BASE_URL}/api/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -93,7 +93,7 @@ if (registerForm) {
 
       // Redirect to login page
       setTimeout(() => {
-        window.location.href = "./auth/login.html";
+        window.location.href = "./login.html";
       }, 1500);
     } catch (error) {
       errorMessage.textContent =

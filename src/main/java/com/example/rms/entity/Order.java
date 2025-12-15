@@ -2,6 +2,7 @@ package com.example.rms.entity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,7 +32,9 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> items;
 
-    public Order() {}
+    public Order() {
+        this.items = new ArrayList<>();
+    }
 
     @PrePersist
     public void onCreate() {

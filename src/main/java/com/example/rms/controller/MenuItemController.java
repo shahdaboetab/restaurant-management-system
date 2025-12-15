@@ -30,14 +30,19 @@ public class MenuItemController {
         return menuItemService.getAllMenuItems();
     }
 
-    @PostMapping("/{categoryId}")
-    public MenuItemDto create(@PathVariable int categoryId, @RequestParam("name") String name, @RequestParam("description") String description, @RequestParam("price") Double price, @RequestParam("image") MultipartFile imageFile){
-        MenuItemDto dto = new MenuItemDto();
-        dto.setName(name);
-        dto.setDescription(description);
-        dto.setPrice(price);
-        
-        return menuItemService.createMenuItem(categoryId, dto, imageFile);
+    @PostMapping
+    public MenuItemDto create(@RequestBody MenuItemDto menuItemDto){
+        return menuItemService.createMenuItem(menuItemDto);
+    }
+
+    @PostMapping("/upload")
+    public MenuItemDto createWithFile(
+            @RequestParam("name") String name,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("categoryId") Integer categoryId,
+            @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) {
+        return menuItemService.createMenuItemWithFile(name, description, price, categoryId, imageFile);
     }
 
     @GetMapping("/category/{categoryId}")

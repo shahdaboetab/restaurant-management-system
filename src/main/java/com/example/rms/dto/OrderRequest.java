@@ -2,14 +2,11 @@ package com.example.rms.dto;
 
 import java.util.List;
 
-import com.example.rms.entity.OrderItem;
-
 public class OrderRequest {
 
-    private Integer customerId; 
-    
+    private Integer customerId;
     private String paymentMethod;
-    private List<OrderItem> items;
+    private List<OrderItemRequest> items;
 
     public OrderRequest() {
     }
@@ -22,17 +19,19 @@ public class OrderRequest {
         this.customerId = customerId;
     }
 
-    public String getPaymentMethod() { 
-        return paymentMethod; }
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
 
-    public void setPaymentMethod(String paymentMethod) { 
-        this.paymentMethod = paymentMethod; }
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
 
-    public List<OrderItem> getItems() {
+    public List<OrderItemRequest> getItems() {
         return this.items;
     }
 
-    public void setItems(List<OrderItem> items) {
+    public void setItems(List<OrderItemRequest> items) {
         this.items = items;
     }
 }

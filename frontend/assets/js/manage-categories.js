@@ -38,7 +38,7 @@ async function fetchCategories() {
                                       <i class="fas fa-spinner fa-spin mr-2"></i> Loading categories...
                                    </td></tr>`;
   try {
-    const response = await fetch(`${BASE_URL}/admin/categories`, {
+    const response = await fetch(`${BASE_URL}/api/categories`, {
       headers: getAuthHeaders(),
     });
     if (!response.ok) throw new Error("Failed to fetch categories.");
@@ -143,8 +143,8 @@ categoryForm.addEventListener("submit", async (e) => {
   const categoryId = document.getElementById("category-id").value;
   const method = isEditMode ? "PUT" : "POST";
   const url = isEditMode
-    ? `${BASE_URL}/admin/categories/${categoryId}`
-    : `${BASE_URL}/admin/categories`;
+    ? `${BASE_URL}/api/categories/${categoryId}`
+    : `${BASE_URL}/api/categories`;
 
   try {
     const response = await fetch(url, {
@@ -179,7 +179,7 @@ async function deleteCategory(categoryId) {
   }
 
   try {
-    const response = await fetch(`${BASE_URL}/admin/categories/${categoryId}`, {
+    const response = await fetch(`${BASE_URL}/api/categories/${categoryId}`, {
       method: "DELETE",
       headers: getAuthHeaders(),
     });

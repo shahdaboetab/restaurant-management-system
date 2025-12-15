@@ -29,7 +29,11 @@ CREATE TABLE menuItems (
 CREATE TABLE customers_orders (
     orderId INT AUTO_INCREMENT PRIMARY KEY,
     customerId INT,
+    staffId INT,
+    totalPrice DOUBLE DEFAULT 0.0,
     status VARCHAR(50) NOT NULL,
+    paymentStatus VARCHAR(50) DEFAULT 'UNPAID',
+    paymentMethod VARCHAR(50),
     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (customerId) REFERENCES users(id)
